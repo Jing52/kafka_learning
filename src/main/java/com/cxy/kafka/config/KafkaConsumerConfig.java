@@ -30,7 +30,7 @@ public class KafkaConsumerConfig {
 
     //服务是否自动提交
     @Value("${kafka.consumer.enable.auto.commit}")
-    private Boolean enableAutoCommit;
+    private boolean enableAutoCommit;
 
     //session超时时间
     @Value("${kafka.consumer.session.timeout}")
@@ -52,7 +52,7 @@ public class KafkaConsumerConfig {
     @Value("${kafka.consumer.concurrency}")
     private int concurrency;
 
-    public Map<String,Object> consumerConfigs() {
+    private Map<String,Object> consumerConfigs() {
         Map<String,Object> props = new HashMap<String, Object>(16);
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, servers);
         props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, enableAutoCommit);
@@ -65,11 +65,11 @@ public class KafkaConsumerConfig {
         return props;
     }
 
-    public ConsumerFactory<String, MessageEntity> consumerFactory(){
+    private ConsumerFactory<String, MessageEntity> consumerFactory() {
         return new DefaultKafkaConsumerFactory<String, MessageEntity>(
                 consumerConfigs(),
                 new StringDeserializer(),
-                new JsonDeserializer<MessageEntity>());
+                new JsonDeserializer<MessageEntity>(MessageEntity.class));
     }
 
     @Bean

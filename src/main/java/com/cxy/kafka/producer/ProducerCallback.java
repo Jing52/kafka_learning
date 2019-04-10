@@ -1,7 +1,6 @@
 package com.cxy.kafka.producer;
 
 import com.cxy.kafka.common.MessageEntity;
-import com.cxy.kafka.consumer.SimpleConsumer;
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.RecordMetadata;
@@ -47,14 +46,14 @@ public class ProducerCallback implements ListenableFutureCallback<SendResult<Str
 
         RecordMetadata metadata = stringMessageEntitySendResult.getRecordMetadata();
         if(metadata!=null){
-            StringBuffer stringBuffer = new StringBuffer();
-            stringBuffer.append("message(")
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("message(")
                     .append("key= ").append(key).append(",")
                     .append("message= ").append(gson.toJson(messageEntity)).append(")")
                     .append("sent to partition(").append(metadata.partition()).append(")")
                     .append("with offset(").append(metadata.offset()).append(")")
                     .append("in ").append(elapsedTime).append(" ms");
-            logger.info(stringBuffer.toString());
+            logger.info(stringBuilder.toString());
         }
     }
 }
