@@ -643,5 +643,38 @@ public class ProducerController {
 ![send](https://upload-images.jianshu.io/upload_images/14481291-83da8ee4d338b801.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 发送kafka消息成功，去看下控制台，成功接收到kafka消息
 ![success](https://upload-images.jianshu.io/upload_images/14481291-69e302d01c8bea76.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-## 源代码
+### 源代码
 [源代码](https://github.com/nullcxy/kafka_learning)
+## Kafka高级特性——消息事物
+### 为什么要支持事物
+* 满足“读取-处理-写入”模式
+* 流处理需求不断增强
+* 不准确的数据处理的容忍度
+### 数据传输的事物定义
+* 最多一次：消息不会被重复发送，最多被传输一次，但也有可能一次都不传输
+* 最少一次：消息不会被漏发送，最少被传输一次，但也有可能被重复传输
+* 精确的一次（Exactly once）：不会被漏发送也不会被重复发送，每个消息都被传输一次而且仅仅被传输一次，这是大家所期望的
+### 事物保证
+* 内部重试问题：Procedure幂等处理
+* 多分区原子写入
+![多分区原子写入](https://upload-images.jianshu.io/upload_images/14481291-0dfd76c38774abb3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+### 事物保证-避免僵尸实例
+* 每个事物Producer分配一个transactional.id，在进程重新启动时能识别相同的Producer实例
+* Kafka增加了一个与transactional.id相关的epoch，存储每个transactional.id元数据
+* 一旦epoch被触发，任何具有相同transactional.id和更旧的epoch的Producer被视为僵尸，Kafka会拒绝来自这些Procedure的后续事务性写入
+## Kafka高级特性——零拷贝
+### 零拷贝简介
+* 网络传输持久性日志块
+* Java Nio channel.transforTo()方法
+* Linux sendfile系统调用
+### 文件传输到网络的公共数据路径
+* 操作系统将数据从磁盘读入到内核空间的页缓存
+* 应用程序将数据从内核空间读入到用户空间缓存中
+* 应用程序将数据写回到内核空间到socket缓存中
+* 操作系统将数据从socket缓存中复制到网卡缓冲区，以便将数据经网络发出
+### 零拷贝路径
+* 操作系统将数据从磁盘读入到内核空间的页缓存
+* 将数据的位置和长度的信息的描述符增加至内核空间（socket缓冲区）
+* 操作系统将数据从内核复制到网卡缓冲区，以便将数据经网络发出
+零拷贝是指内核空间和用户空间的交互的拷贝次数为零
+![文件传输到网络的公共数据路径演变](https://upload-images.jianshu.io/upload_images/14481291-5aa06fd2b38f2bde.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
