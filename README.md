@@ -115,12 +115,12 @@ PS：如果是Mac的话，有一个便捷安装方法，`brew install kafka`
 kafka-topics.bat --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic test
 ```
 #### 创建一个Producer
-运行新的cmd命令行，进入`..\kafka_2.11-2.2.0`，输入命令
+运行新的cmd命令行，进入`..\kafka_2.11-2.2.0\bin\windows`，输入命令
 ```
 kafka-console-producer.bat --broker-list localhost:9092 --topic test
 ```
 #### 创建一个Consumer
-运行新的cmd命令行，进入`..\kafka_2.11-2.2.0`，输入命令
+运行新的cmd命令行，进入`..\kafka_2.11-2.2.0\bin\windows`，输入命令
 ```
 kafka-console-consumer.bat --bootstrap-server localhost:9092 --topic test --from-beginning
 ```
