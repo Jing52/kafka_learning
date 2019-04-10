@@ -9,9 +9,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @Auther: cxy
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
  * @Description:
  */
 @Slf4j
-@Controller
+@RestController
 @RequestMapping("/kafka")
 public class ProducerController {
     public static final Logger logger = Logger.getLogger(ProducerController.class);
@@ -38,7 +39,7 @@ public class ProducerController {
     }
 
     @RequestMapping(value="/send",method = RequestMethod.POST, produces = "application/json")
-    public Response sendKafka(MessageEntity messageEntity){
+    public Response sendKafka(@RequestBody MessageEntity messageEntity){
         try{
             logger.info("kafka消息:{}"+gson.toJson(messageEntity));
             simpleProducer.send(topic,"key",messageEntity);
