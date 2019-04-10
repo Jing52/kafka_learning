@@ -33,12 +33,12 @@ public class ProducerController {
 
     private Gson gson = new Gson();
 
-    @RequestMapping(value="/hello",method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value="/hello",method = RequestMethod.GET, produces = {"application/json"})
     public Response sendKafka(){
         return new Response(ErrorCode.SUCCESS,"SUCCESS");
     }
 
-    @RequestMapping(value="/send",method = RequestMethod.POST, produces = "application/json")
+    @RequestMapping(value="/send",method = RequestMethod.POST, produces = {"application/json"})
     public Response sendKafka(@RequestBody MessageEntity messageEntity){
         try{
             logger.info("kafka消息:{}"+gson.toJson(messageEntity));
